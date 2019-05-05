@@ -43,3 +43,17 @@ df.Solely_by_students = df.Solely_by_students.map({"No":False,"Yes":True})
 
 # Change the Is_1st_Author_a_Student data type from string to boolean
 df.Is_1st_Author_a_Student = df.Is_1st_Author_a_Student.map({"No":False,"Yes":True})
+
+# Replace invalid and inaccurate Journal_Country values
+JournalsReplace = {'China (Republic : 1949- )':'China',
+                    'England':'United Kingdom','Scotland':'United Kingdom','Korea (South)':'South Korea'}
+df.Journal_Country = df.Journal_Country.replace(JournalsReplace)
+
+# Create a new boolean variable: Same_Country 
+df["Same_Country"] = df.Journal_Country == df.Paper_Country
+
+# Save the cleaned data into an excel file
+df.index =df.index+1
+Writer = pd.ExcelWriter("2019-04-16 Clean Data.xlsx")
+df.to_excel(Writer, "Clean Data")
+Writer.save()
